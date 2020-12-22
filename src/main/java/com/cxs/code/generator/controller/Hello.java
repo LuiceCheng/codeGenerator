@@ -102,6 +102,8 @@ public class Hello {
     VelocityContext context = new VelocityContext();
     context.put("table", configContext.getTargetTable());
     context.put("name", configContext.getTargetName());
+    String lowerName = StringUtil.firstToLower(configContext.getTargetName());
+    context.put("lowerName", lowerName);
     initContext(context,configContext,data);
     callback.write(configContext, context);
 
