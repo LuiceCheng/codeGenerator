@@ -1,0 +1,42 @@
+package ${package}.${serviceImpl};
+
+import ${package}.${dao}.I${name}Dao;
+import ${package}.${baseDao}.IBaseDao;
+import ${package}.${entityBase}.Msg;
+import ${package}.${entityBase}.enums.EnError;
+import ${package}.${baseService}.IBaseService;
+import ${package}.${baseServiceImpl}.BaseServiceImpl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+@Service
+public class ${name}ServiceImpl extends BaseServiceImpl<${name}> implements I${name}Service {
+
+    private static final Logger logger = LoggerFactory.getLogger(BaseServiceImpl.class);
+
+    @Autowired
+    private I${name}Dao ${lowerName}Dao;
+
+    @Override
+    public IBaseDao<${name}> getRepositoryDao() {
+        return this.${lowerName}Dao;
+    }
+
+    @Override
+    public void setDefaults(${name} record) {
+    }
+
+    @Override
+    public String getPrimaryKeyValue(${name} record) {
+        return null;
+    }
+
+    @Override
+    public void emptyPrimaryKeyValue(${name} record) {
+
+    }
+}

@@ -1,0 +1,8 @@
+package ${package}.${service};
+
+import ${package}.${entity}.${name};
+import ${package}.${baseService}.IBaseService;
+import java.util.List;
+
+public interface I${name}Service extends IBaseService<${name}>{
+}

@@ -1,0 +1,8 @@
+package ${package}.${dao};
+
+import org.apache.ibatis.annotations.Mapper;
+import ${package}.${entity}.${name};
+
+@Mapper
+public interface I${name}Dao extends IBaseDao<${name}>{
+}

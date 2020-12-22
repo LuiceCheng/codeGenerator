@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${package}.${dao}.I${name}Dao">
+    <resultMap id="BaseResultMap" type="${package}.${entity}.${name}">
+        <!--
+          警告 -
+          此语句为代码生成器自动生成,请勿更改
+        -->
+    #foreach($column in $columns)
+    <result column="${column.columnName}" jdbcType="${column.mybatisJdbcType}" property="${column.javaFieldName}" />
+    #end
+</resultMap>
+    <sql id="Example_Where_Clause">
+        <!--
+          警告 -
+          此语句为代码生成器自动生成,请勿更改
+        -->
+        <where>
+            1=1
+#foreach($column in $columns)
+#if($column.javaType == "String")
+            <if test = "${column.javaFieldName} != null and ${column.javaFieldName} != ''">
+#else
+            <if test = "${column.javaFieldName} != null">
+#end
+                and ${column.columnName} = #{${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}
+            </if>
+#end
+        </where>
+    </sql>
+
+    <sql id="Prefixed_Example_Where_Clause">
+        <!--
+          警告 -
+          此语句为代码生成器自动生成,请勿更改
+        -->
+        <where>
+            1=1
+#foreach($column in $columns)
+#if($column.javaType == "String")
+            <if test="record.${column.javaFieldName} != null and record.${column.javaFieldName} != ''">
+#else
+            <if test = "record.${column.javaFieldName} != null">
+#end
+                and ${column.columnName} = #{record.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}
+            </if>
+#end
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        <!--
+          警告 -
+          此语句为代码生成器自动生成,请勿更改
+        -->
+#foreach($column in $columns)
+        ${column.columnName}#if($foreach.hasNext),
+#end
+#end
+    </sql>
+
+    <select id="selectByExample" resultMap="BaseResultMap">
+        <!--
+          警告 -
+          此语句为代码生成器自动生成,请勿更改
+        -->
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+            from ${table}
+        <include refid="Prefixed_Example_Where_Clause" />
+    </select>
+
+    <select id="selectByExamplePage" resultMap="BaseResultMap">
+        <!--
+          警告 -
+          此语句为代码生成器自动生成,请勿更改
+        -->
+        select
+        <include refid="Base_Column_List" />
+        from ${table}
+        <include refid="Prefixed_Example_Where_Clause" />
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <!--
+            警告 -
+            此语句为代码生成器自动生成,请勿更改
+        -->
+        select
+        <include refid="Base_Column_List" />
+        from ${table}
+        where
+#foreach($column in $columns)
+#if(${column.isPk})
+        ${column.columnName} = #{${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}
+#end
+#end
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        <!--
+            警告 -
+            此语句为代码生成器自动生成,请勿更改
+        -->
+        delete from ${table}
+        where
+#foreach($column in $columns)
+#if(${column.isPk})
+        ${column.columnName} = #{${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}
+#end
+#end
+    </delete>
+    <delete id="deleteByExample" parameterType="${package}.${entity}.${name}">
+        <!--
+            警告 -
+            此语句为代码生成器自动生成,请勿更改
+        -->
+        delete from ${table}
+        <include refid="Example_Where_Clause" />
+    </delete>
+
+    <insert id="insert" parameterType="${package}.${entity}.${name}">
+      <!--
+        警告 -
+        此语句为代码生成器自动生成,请勿更改
+      -->
+        insert into ${table}(
+#foreach($column in $columns)
+        ${column.columnName}#if($foreach.hasNext),
+#end
+#end)
+        values
+        (#foreach($column in $columns)
+#{${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}#if($foreach.hasNext),
+        #end
+#end)
+    </insert>
+
+    <insert id="insertSelective" parameterType="${package}.${entity}.${name}">
+      <!--
+        警告 -
+        此语句为代码生成器自动生成,请勿更改
+      -->
+        insert into ${table}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+#foreach($column in $columns)
+#if($column.javaType == "String")
+            <if test="${column.javaFieldName} != null and ${column.javaFieldName} != ''">
+#else
+            <if test = "${column.javaFieldName} != null">
+#end
+                ${column.columnName}#if($foreach.hasNext),
+#end
+            </if>
+#end
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+#foreach($column in $columns)
+#if($column.javaType == "String")
+            <if test="${column.javaFieldName} != null and ${column.javaFieldName} != ''">
+#else
+            <if test = "${column.javaFieldName} != null">
+#end
+                #{${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}#if($foreach.hasNext),
+#end
+            </if>
+#end
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="${package}.${entity}.${name}" resultType="java.lang.Long">
+      <!--
+        警告 -
+        此语句为代码生成器自动生成,请勿更改
+      -->
+        select count(1) from ${table}
+        <include refid="Example_Where_Clause" />
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="${package}.${entity}.${name}">
+        <!--
+            警告 -
+            此语句为代码生成器自动生成,请勿更改
+        -->
+        update ${table}
+        <set>
+#foreach($column in $columns)
+#if(!${column.isPk})
+#if($column.javaType == "String")
+            <if test="${column.javaFieldName} != null and ${column.javaFieldName} != ''">
+#else
+            <if test = "${column.javaFieldName} != null">
+#end
+                ${column.columnName} = #{${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}#if($foreach.hasNext),
+#end
+            </if>
+#end
+#end
+
+        </set>
+        where
+#foreach($column in $columns)
+#if(${column.isPk})
+        ${column.columnName} = #{${column.javaFieldName},jdbcType=VARCHAR}
+#end
+#end
+
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="${package}.${entity}.${name}">
+        <!--
+            警告 -
+            此语句为代码生成器自动生成,请勿更改
+        -->
+        update ${table}
+        set
+#foreach($column in $columns)
+#if(!${column.isPk})
+        ${column.columnName} = #{${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}#if($foreach.hasNext),
+#end
+#end
+#end
+
+        where
+#foreach($column in $columns)
+#if(${column.isPk})
+        ${column.columnName} = #{${column.javaFieldName},jdbcType=VARCHAR}
+#end
+#end
+    </update>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        <!--
+            警告 -
+            此语句为代码生成器自动生成,请勿更改
+        -->
+        insert into ${table}(
+#foreach($column in $columns)
+        ${column.columnName}#if($foreach.hasNext),
+#end
+#end)
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+        (
+#foreach($column in $columns)
+        #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}#if($foreach.hasNext),
+#end
+#end
+
+        )
+        </foreach>
+    </insert>
+
+
+    <insert id="batchInsertSelective" parameterType="java.util.List">
+        <!--
+            警告 -
+            此语句为代码生成器自动生成,请勿更改
+        -->
+        <foreach collection="list" index="index" item="item" separator=";">
+            insert into ${table}
+            <set>
+#foreach($column in $columns)
+#if($column.javaType == "String")
+                <if test="item.${column.javaFieldName} != null and item.${column.javaFieldName} != ''">
+#else
+                <if test = "item.${column.javaFieldName} != null">
+#end
+                    ${column.columnName} = #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}#if($foreach.hasNext),
+#end
+
+                </if>
+#end
+            </set>
+        </foreach>
+    </insert>
+
+    <delete id="batchDeleteByPrimaryKey" parameterType="java.util.List">
+        <!--
+            警告 -
+            此语句为代码生成器自动生成,请勿更改
+         -->
+        delete from ${table}
+        where
+#foreach($column in $columns)
+#if(${column.isPk})
+        ${column.columnName}
+#end
+#end
+        in
+        <foreach close=")" collection="items" index="index" item="item" open="(" separator=",">
+          #{item}
+        </foreach>
+    </delete>
+
+    <update id="batchUpdateByPrimaryKey" parameterType="java.util.List">
+        <!--
+            警告 -
+            此语句为代码生成器自动生成,请勿更改
+         -->
+        <foreach collection="list" index="index" item="item" separator=";">
+            update ${table}
+            set
+#foreach($column in $columns)
+#if(!${column.isPk})
+            ${column.columnName} = #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}#if($foreach.hasNext),
+#end
+#end
+#end
+
+            where
+#foreach($column in $columns)
+#if(${column.isPk})
+            ${column.columnName} = #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}
+#end
+#end
+        </foreach>
+    </update>
+
+    <update id="batchUpdateByPrimaryKeySelective" parameterType="java.util.List">
+        <!--
+            警告 -
+            此语句为代码生成器自动生成,请勿更改
+        -->
+        <foreach collection="list" index="index" item="item" separator=";">
+            update ${table}
+            <set>
+#foreach($column in $columns)
+#if(!${column.isPk})
+#if($column.javaType == "String")
+                <if test="item.${column.javaFieldName} != null and item.${column.javaFieldName} != ''">
+#else
+                <if test = "item.${column.javaFieldName} != null">
+#end
+                    ${column.columnName} = #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}#if($foreach.hasNext),
+#end
+                </if>
+#end
+#end
+              </set>
+            where
+#foreach($column in $columns)
+#if(${column.isPk})
+            ${column.columnName} = #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}
+#end
+#end
+        </foreach>
+    </update>
+
+    <select id="fuzzySearch" resultMap="BaseResultMap">
+        <!--
+            警告 -
+            此语句为代码生成器自动生成,请勿更改
+        -->
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM ${table}
+        <include refid="fuzzy_search_where_map" />
+    </select>
+
+    <select id="fuzzySearchByPager" resultMap="BaseResultMap">
+        <!--
+            警告 -
+            此语句为代码生成器自动生成,请勿更改
+        -->
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM t_sys_resource
+        <include refid="fuzzy_search_where_pager_map"/>
+    </select>
+
+    <sql id="fuzzy_search_where_map">
+        <!--
+            警告 -
+            此语句为代码生成器自动生成,请勿更改
+        -->
+        <where>
+#foreach($column in $columns)
+#if($column.javaType == "String")
+            <if test="${column.javaFieldName} != null and ${column.javaFieldName} != ''">
+                and ${column.columnName} like concat('%',#{${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}, '%')
+#else
+            <if test = "${column.javaFieldName} != null">
+                and ${column.columnName} = #{${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}
+#end
+            </if>
+#end
+        </where>
+    </sql>
+
+    <select id="fuzzySearchByPager" resultMap="BaseResultMap">
+        <!--
+            警告 -
+            此语句为代码生成器自动生成,请勿更改
+        -->
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM ${table}
+        <include refid="fuzzy_search_where_pager_map" />
+    </select>
+
+    <sql id="fuzzy_search_where_pager_map">
+        <!--
+            警告 -
+            此语句为代码生成器自动生成,请勿更改
+        -->
+        <where>
+#foreach($column in $columns)
+#if($column.javaType == "String")
+            <if test="item.${column.javaFieldName} != null and item.${column.javaFieldName} != ''">
+                  and ${column.columnName} like concat('%',#{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}, '%')
+#else
+            <if test ="item.${column.javaFieldName} != null">
+                  and ${column.columnName} = #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}
+#end
+            </if>
+#end
+        </where>
+    </sql>
+</mapper>

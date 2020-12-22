@@ -1,0 +1,11 @@
+package ${package}.${entityBase};
+
+/**
+* description: 常量
+* 代码生成器生成
+*/
+public class GlobalConstants {
+    public static final String AES_KEY ="ABX0s4eEswnWS903@3s3";
+
+    public static final int BATCH_INSERT_SIZE = 1000;
+}

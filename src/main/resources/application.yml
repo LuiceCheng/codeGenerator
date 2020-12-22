@@ -1,0 +1,12 @@
+server:
+  port: 8888
+
+spring:
+  velocity:
+    charset: UTF-8
+    content-type: text/html
+    properties:
+      file:
+        resource:
+          loader:
+            class: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
