@@ -422,7 +422,7 @@
     </sql>
 
     <sql id="Prefixed_Example_Order">
-        <if test="record.orderList.size() > 0">
+        <if test="record.orderList != null and record.orderList.size() > 0">
             order by
             <foreach collection="record.orderList" item="mapItems" separator=",">
                 <foreach collection="mapItems.entrySet()" item="value" index="key" >
