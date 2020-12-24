@@ -81,6 +81,8 @@
         <include refid="Base_Column_List" />
         from ${table}
         <include refid="Prefixed_Example_Where_Clause" />
+        <include refid="Prefixed_Example_Order" />
+
     </select>
 
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -417,5 +419,16 @@
             </if>
 #end
         </where>
+    </sql>
+
+    <sql id="Prefixed_Example_Order">
+        <if test="record.orderList.size() > 0">
+            order by
+            <foreach collection="record.orderList" item="mapItems" separator=",">
+                <foreach collection="mapItems.entrySet()" item="value" index="key" >
+                    ${key} ${value}
+                </foreach>
+            </foreach>
+        </if>
     </sql>
 </mapper>
