@@ -361,17 +361,6 @@
         <include refid="fuzzy_search_where_map" />
     </select>
 
-    <select id="fuzzySearchByPager" resultMap="BaseResultMap">
-        <!--
-            警告 -
-            此语句为代码生成器自动生成,请勿更改
-        -->
-        SELECT
-        <include refid="Base_Column_List"/>
-        FROM t_sys_resource
-        <include refid="fuzzy_search_where_pager_map"/>
-    </select>
-
     <sql id="fuzzy_search_where_map">
         <!--
             警告 -
