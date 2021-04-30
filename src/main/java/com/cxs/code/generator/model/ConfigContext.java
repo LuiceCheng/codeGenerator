@@ -35,6 +35,10 @@ public class ConfigContext {
     private String daoBase = "dao\\base";
     private String xmlPath = "resource";
 
+    private String env;
+
+    private String downloadPath = "/opt/generator-code/outpath/";
+
     public String getSourcePath() {
         return sourcePath;
     }
@@ -217,5 +221,17 @@ public class ConfigContext {
 
     public void setXmlPath(String xmlPath) {
         this.xmlPath = xmlPath;
+    }
+
+    public String getEnv() {
+        return env;
+    }
+
+    public void setEnv(String env) {
+        this.env = env;
+    }
+
+    public String getDownloadPath() {
+        return downloadPath;
     }
 }

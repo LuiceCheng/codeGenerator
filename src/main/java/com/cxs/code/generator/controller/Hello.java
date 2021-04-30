@@ -7,6 +7,7 @@ import com.cxs.code.generator.model.Config;
 import com.cxs.code.generator.model.ConfigContext;
 import com.cxs.code.generator.service.Callback;
 import com.cxs.code.generator.util.StringUtil;
+import com.cxs.code.generator.util.ZipUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -72,10 +75,12 @@ public class Hello {
    * @param configContext
    * @return
    */
-  @RequestMapping(value = "generateByTable", method = RequestMethod.POST)
+  @RequestMapping(value = "generateByTable", method = RequestMethod.GET)
   @ResponseBody
-  public String codeGenerate(ConfigContext configContext) {
-
+  public String codeGenerate(HttpServletResponse response, ConfigContext configContext) {
+    if("prod".equals(configContext.getEnv())){
+      configContext.setOutputPath(configContext.getDownloadPath());
+    }
     configContext.setDriver(JDBCDRIVER);
     configContext.setUrl(MYSQLJDBCURLHEADER + configContext.getIp() + ":" + configContext.getPort() + "/" + configContext.getSourceDatabase() + SERVERTIMEZONE);
 
@@ -91,6 +96,14 @@ public class Hello {
     //生成代码
     doGenerator(configContext, columnDefinitionList);
 
+    if("prod".equals(configContext.getEnv())){
+      try {
+        ZipUtils.toZip(configContext.getDownloadPath(), response.getOutputStream(), true);
+        ZipUtils.delFolder(configContext.getDownloadPath());
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
     return "OJBK";
   }
 
@@ -116,9 +129,14 @@ public class Hello {
    * @param configContext
    * @return
    */
-  @RequestMapping(value = "generateByDatabase", method = RequestMethod.POST)
+  @RequestMapping(value = "generateByDatabase", method = RequestMethod.GET)
   @ResponseBody
-  public String codeGenerateByDatabase(ConfigContext configContext) {
+  public String codeGenerateByDatabase(HttpServletResponse response, ConfigContext configContext) {
+
+    if("prod".equals(configContext.getEnv())){
+      configContext.setOutputPath(configContext.getDownloadPath());
+    }
+
     configContext.setDriver(JDBCDRIVER);
     configContext.setUrl(MYSQLJDBCURLHEADER + configContext.getIp() + ":" + configContext.getPort() + "/" + configContext.getSourceDatabase() + SERVERTIMEZONE);
 
@@ -131,6 +149,15 @@ public class Hello {
       List<ColumnDefinition> columnDefinitionList = ColumnHelper.covertColumnDefinition(value);
       String name = StringUtil.firstToUpper(StringUtil.underlineToCamelhump(key));
       deGeneratorByDatabaseName(configContext, columnDefinitionList, key, name);
+    }
+
+    if("prod".equals(configContext.getEnv())){
+      try {
+        ZipUtils.toZip(configContext.getDownloadPath(), response.getOutputStream(), true);
+        ZipUtils.delFolder(configContext.getDownloadPath());
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
     return "ojbk";
   }
