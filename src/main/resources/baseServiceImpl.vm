@@ -5,6 +5,7 @@ import ${package}.${entityBase}.GobalConstants;
 import ${package}.${entityBase}.enums.EnError;
 import ${package}.${baseService}.IBaseService;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -278,10 +279,10 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     }
 
     @Override
-    public Msg<Page<T>> fuzzySearchByPager(T record, Page pageBounds) {
+    public Msg<IPage<T>> fuzzySearchByPager(T record, Page pageBounds) {
         Page<T> resultPage = getRepositoryDao().fuzzySearchByPager(record);
         List<T> result = resultPage.getRecords();
-        Msg<Page<T>> msg = new Msg<>();
+        Msg<IPage<T>> msg = new Msg<>();
         if(null == result){
             msg.setResult(EnError.NO_MATCH);
         }
