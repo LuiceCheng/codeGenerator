@@ -189,14 +189,18 @@
         <set>
 #foreach($column in $columns)
 #if(!${column.isPk})
-#if($column.javaType == "String")
-            <if test="${column.javaFieldName} != null and ${column.javaFieldName} != ''">
+#if(${column.javaFieldName} == "version")
+    <if test = "${column.javaFieldName} != null">
+        ${column.columnName} = #{${column.javaFieldName},jdbcType=${column.mybatisJdbcType}} + 1#if($foreach.hasNext),#end
 #else
-            <if test = "${column.javaFieldName} != null">
+    #if($column.javaType == "String")
+                <if test="${column.javaFieldName} != null and ${column.javaFieldName} != ''">
+    #else
+                <if test = "${column.javaFieldName} != null">
+    #end
+                    ${column.columnName} = #{${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}#if($foreach.hasNext),#end
 #end
-                ${column.columnName} = #{${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}#if($foreach.hasNext),
-#end
-            </if>
+    </if>
 #end
 #end
 
@@ -205,6 +209,9 @@
 #foreach($column in $columns)
 #if(${column.isPk})
         ${column.columnName} = #{${column.javaFieldName},jdbcType=VARCHAR}
+#end
+#if(${column.javaFieldName} == "version")
+        AND ${column.columnName} = #{${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}
 #end
 #end
 
@@ -219,8 +226,13 @@
         set
 #foreach($column in $columns)
 #if(!${column.isPk})
+    #if(${column.javaFieldName} == "version")
+        ${column.columnName} = #{${column.javaFieldName},jdbcType=${column.mybatisJdbcType}} + 1#if($foreach.hasNext),
+    #end
+    #else
         ${column.columnName} = #{${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}#if($foreach.hasNext),
-#end
+    #end
+    #end
 #end
 #end
 
@@ -228,6 +240,9 @@
 #foreach($column in $columns)
 #if(${column.isPk})
         ${column.columnName} = #{${column.javaFieldName},jdbcType=VARCHAR}
+#end
+#if(${column.javaFieldName} == "version")
+     AND ${column.columnName} = #{${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}
 #end
 #end
     </update>
@@ -306,8 +321,13 @@
             set
 #foreach($column in $columns)
 #if(!${column.isPk})
-            ${column.columnName} = #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}#if($foreach.hasNext),
-#end
+    #if(${column.javaFieldName} == "version")
+        ${column.columnName} = #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}} + 1#if($foreach.hasNext),
+    #end
+    #else
+        ${column.columnName} = #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}#if($foreach.hasNext),
+    #end
+    #end
 #end
 #end
 
@@ -315,6 +335,9 @@
 #foreach($column in $columns)
 #if(${column.isPk})
             ${column.columnName} = #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}
+#end
+#if(${column.javaFieldName} == "version")
+           AND ${column.columnName} = #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}
 #end
 #end
         </foreach>
@@ -330,13 +353,18 @@
             <set>
 #foreach($column in $columns)
 #if(!${column.isPk})
-#if($column.javaType == "String")
-                <if test="item.${column.javaFieldName} != null and item.${column.javaFieldName} != ''">
+#if(${column.javaFieldName} == "version")
+                    <if test = "item.${column.javaFieldName} != null">
+                        ${column.columnName} = #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}} + 1#if($foreach.hasNext),#end
 #else
-                <if test = "item.${column.javaFieldName} != null">
+    #if($column.javaType == "String")
+                    <if test="item.${column.javaFieldName} != null and item.${column.javaFieldName} != ''">
+    #else
+                    <if test = "item.${column.javaFieldName} != null">
+    #end
+                        ${column.columnName} = #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}#if($foreach.hasNext),#end
 #end
-                    ${column.columnName} = #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}#if($foreach.hasNext),
-#end
+
                 </if>
 #end
 #end
@@ -345,6 +373,9 @@
 #foreach($column in $columns)
 #if(${column.isPk})
             ${column.columnName} = #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}
+#end
+#if(${column.javaFieldName} == "version")
+            AND ${column.columnName} = #{item.${column.javaFieldName},jdbcType=${column.mybatisJdbcType}}
 #end
 #end
         </foreach>
